@@ -1,14 +1,15 @@
 Demo Flow
-Developer in VS Code (LIVE DEMO)
-    ↓
-Writes Code → Gemini Code Assist suggests code
-    ↓
-Snyk MCP Server detects vulnerabilities in real-time
-    ↓
-Developer sees inline warnings immediately
-    ↓
-Gemini suggests secure fixes
-    ↓
-Git Push → GitHub Actions
-    ↓
-Standard CI/CD (tests, build, deploy)
+
+Developer codes in VS Code
+
+Gemini Code Assist suggests improvements as they type
+
+Snyk MCP Server scans code for vulnerabilities in real time
+
+Developer sees inline security warnings instantly
+
+Gemini offers secure fix suggestions
+
+Code is pushed to GitHub
+
+GitHub Actions runs CI/CD (tests, build, deploy)
