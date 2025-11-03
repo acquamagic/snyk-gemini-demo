@@ -468,56 +468,5 @@ jobs:
           command: monitor
           args: --project-name=snyk-gemini-demo-production
 
-  # Job 7: Security Report Summary
-  security-summary:
-    name: Security Report Summary
-    runs-on: ubuntu-latest
-    needs: [security-scan, build]
-    if: always()
-    
-    steps:
-      - name: Download all Snyk reports
-        uses: actions/download-artifact@v4
-        with:
-          pattern: snyk-*
-          merge-multiple: true
-      
-      - name: Generate Security Summary
-        run: |
-          echo "# 🔒 Security Scan Summary" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          
-          # Code Analysis
-          if [ -f snyk-code.json ]; then
-            echo "## Snyk Code (SAST)" >> $GITHUB_STEP_SUMMARY
-            CRITICAL=$(jq -r '.runs[0].results | map(select(.level == "error")) | length' snyk-code.json 2>/dev/null || echo "0")
-            WARNING=$(jq -r '.runs[0].results | map(select(.level == "warning")) | length' snyk-code.json 2>/dev/null || echo "0")
-            echo "- Critical Issues: $CRITICAL" >> $GITHUB_STEP_SUMMARY
-            echo "- Warnings: $WARNING" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-          fi
-          
-          # Dependency Analysis
-          if [ -f snyk-opensource.json ]; then
-            echo "## Snyk Open Source" >> $GITHUB_STEP_SUMMARY
-            CRITICAL=$(jq -r '.vulnerabilities | map(select(.severity == "critical")) | length' snyk-opensource.json 2>/dev/null || echo "0")
-            HIGH=$(jq -r '.vulnerabilities | map(select(.severity == "high")) | length' snyk-opensource.json 2>/dev/null || echo "0")
-            echo "- Critical Vulnerabilities: $CRITICAL" >> $GITHUB_STEP_SUMMARY
-            echo "- High Vulnerabilities: $HIGH" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-          fi
-          
-          # Container Analysis
-          if [ -f snyk-container.json ]; then
-            echo "## Snyk Container" >> $GITHUB_STEP_SUMMARY
-            CRITICAL=$(jq -r '.vulnerabilities | map(select(.severity == "critical")) | length' snyk-container.json 2>/dev/null || echo "0")
-            HIGH=$(jq -r '.vulnerabilities | map(select(.severity == "high")) | length' snyk-container.json 2>/dev/null || echo "0")
-            echo "- Critical Vulnerabilities: $CRITICAL" >> $GITHUB_STEP_SUMMARY
-            echo "- High Vulnerabilities: $HIGH" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-          fi
-          
-          echo "---" >> $GITHUB_STEP_SUMMARY
-          echo "📊 View detailed reports in [GitHub Security tab](https://github.com/${{ github.repository }}/security/code-scanning)" >> $GITHUB_STEP_SUMMARY
 
 ### Updated CI/CD Pipeline Summary
