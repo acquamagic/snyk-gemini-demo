@@ -67,8 +67,8 @@ jobs:
       
       - name: Build Docker image
         run: |
-          IMAGE_TAG=${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/snyk-demo/${{ env.SERVICE_NAME }}:${{ github.sha }}
-          IMAGE_LATEST=${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/snyk-demo/${{ env.SERVICE_NAME }}:latest
+          IMAGE_TAG=${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/gemini-demo/${{ env.SERVICE_NAME }}:${{ github.sha }}
+          IMAGE_LATEST=${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/gemini-demo/${{ env.SERVICE_NAME }}:latest
           
           docker build -t $IMAGE_TAG -t $IMAGE_LATEST .
           
@@ -104,8 +104,8 @@ jobs:
       
       - name: Push Docker image to Artifact Registry
         run: |
-          IMAGE_TAG=${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/snyk-demo/${{ env.SERVICE_NAME }}:${{ github.sha }}
-          IMAGE_LATEST=${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/snyk-demo/${{ env.SERVICE_NAME }}:latest
+          IMAGE_TAG=${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/gemini-demo/${{ env.SERVICE_NAME }}:${{ github.sha }}
+          IMAGE_LATEST=${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/gemini-demo/${{ env.SERVICE_NAME }}:latest
           
           docker push $IMAGE_TAG
           docker push $IMAGE_LATEST
