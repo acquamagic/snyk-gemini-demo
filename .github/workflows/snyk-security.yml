@@ -1,4 +1,4 @@
-# Github actions worlflow file for Snyk Security
+# GitHub Actions workflow file for Snyk Security
 name: Snyk Security
 
 on:
@@ -16,9 +16,11 @@ jobs:
     permissions:
       contents: read # For actions/checkout to fetch code
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
       
+      # Set up Snyk CLI
       - name: Set up Snyk CLI
         uses: snyk/actions/setup@806182742461562b67788a64410098c9d9b96adb
         env:
@@ -26,8 +28,12 @@ jobs:
 
       # Run Snyk Code (SAST) analysis and report findings to Snyk
       - name: Snyk Code test
-        run: snyk code test
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }} # <–– make token available here too
+        run: snyk code test --severity-threshold=medium
 
       # Run Snyk Open Source (SCA) analysis and report findings to Snyk
       - name: Snyk Open Source test
-        run: snyk test
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }} # <–– and here as well
+        run: snyk test --severity-threshold=medium
