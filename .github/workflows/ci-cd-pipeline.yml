@@ -32,18 +32,19 @@ jobs:
           pip install flake8 black
       
       - name: Auto format code with black
-        run: black src/    
-
+        run: black src/
+      
       - name: Run flake8
         run: flake8 src/ --max-line-length=100
       
       - name: Check code formatting
         run: black --check src/
 
-  # Job 3: Build Container Image
+  # Job 2: Build Container Image
   build:
     name: Build Docker Image
     runs-on: ubuntu-latest
+    needs: [lint]
     permissions:
       contents: read
       id-token: write
@@ -123,7 +124,7 @@ jobs:
           name: snyk-container-report
           path: snyk-container.json
 
-  # Job 4: Deploy to Cloud Run (Staging)
+  # Job 3: Deploy to Cloud Run (Staging)
   deploy-staging:
     name: Deploy to Cloud Run Staging
     runs-on: ubuntu-latest
@@ -164,7 +165,7 @@ jobs:
         with:
           service: ${{ env.SERVICE_NAME }}-staging
           region: ${{ env.GCP_REGION }}
-          image: $( steps.image.outputs.tag )
+          image: ${{ steps.image.outputs.tag }}
           env_vars: |
             FLASK_ENV=staging
           secrets: |
@@ -200,7 +201,7 @@ jobs:
           command: monitor
           args: --project-name=snyk-gemini-demo-staging
 
-  # Job 5: Deploy to Cloud Run (Production)
+  # Job 4: Deploy to Cloud Run (Production)
   deploy-production:
     name: Deploy to Cloud Run Production
     runs-on: ubuntu-latest
@@ -241,7 +242,7 @@ jobs:
         with:
           service: ${{ env.SERVICE_NAME }}-production
           region: ${{ env.GCP_REGION }}
-          image: $( steps.image.outputs.tag )
+          image: ${{ steps.image.outputs.tag }}
           env_vars: |
             FLASK_ENV=production
           secrets: |
@@ -282,5 +283,3 @@ jobs:
         with:
           command: monitor
           args: --project-name=snyk-gemini-demo-production
-
-### Updated CI/CD Pipeline Summary
