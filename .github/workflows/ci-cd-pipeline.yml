@@ -215,25 +215,6 @@ jobs:
         with:
           name: image-tag
       
-      - name: Download Snyk reports
-        uses: actions/download-artifact@v4
-        with:
-          name: snyk-reports
-          path: ./snyk-reports
-      
-      # Final security verification before production
-      - name: Final Security Check
-        run: |
-          echo "🔒 Final security verification before production deployment..."
-          
-          # Check if any critical issues exist
-          if [ -f ./snyk-reports/snyk-code.json ]; then
-            ISSUES=$(jq -r '.runs[0].results | length' ./snyk-reports/snyk-code.json 2>/dev/null || echo "0")
-            echo "Code issues found: $ISSUES"
-          fi
-          
-          echo "✅ Final security check completed"
-      
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
