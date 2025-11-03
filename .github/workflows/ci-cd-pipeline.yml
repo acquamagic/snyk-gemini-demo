@@ -145,6 +145,13 @@ jobs:
         with:
           name: image-tag
       
+      - name: Read image tag
+          id: image
+          run: |
+            IMAGE_TAG=$(cat image-tag.txt)
+            echo "tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
+            echo "Image to deploy: $IMAGE_TAG"
+
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
@@ -157,7 +164,7 @@ jobs:
         with:
           service: ${{ env.SERVICE_NAME }}-staging
           region: ${{ env.GCP_REGION }}
-          image: $(cat image-tag.txt)
+          image: $( steps.image.outputs.tag )
           env_vars: |
             FLASK_ENV=staging
           secrets: |
@@ -215,6 +222,13 @@ jobs:
         with:
           name: image-tag
       
+      - name: Read image tag
+          id: image
+          run: |
+            IMAGE_TAG=$(cat image-tag.txt)
+            echo "tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
+            echo "Image to deploy: $IMAGE_TAG"
+
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
@@ -227,7 +241,7 @@ jobs:
         with:
           service: ${{ env.SERVICE_NAME }}-production
           region: ${{ env.GCP_REGION }}
-          image: $(cat image-tag.txt)
+          image: $( steps.image.outputs.tag )
           env_vars: |
             FLASK_ENV=production
           secrets: |
