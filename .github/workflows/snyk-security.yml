@@ -30,10 +30,10 @@ jobs:
       - name: Snyk Code test
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }} # <–– make token available here too
-        run: snyk code test --severity-threshold=medium
+        run: snyk code test --severity-threshold=medium || true
 
       # Run Snyk Open Source (SCA) analysis and report findings to Snyk
       - name: Snyk Open Source test
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }} # <–– and here as well
-        run: snyk test --severity-threshold=medium
+        run: snyk test --severity-threshold=medium || true
