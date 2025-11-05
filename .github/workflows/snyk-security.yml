@@ -51,3 +51,10 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         run: snyk test --severity-threshold=medium || true
+
+      # Run Snyk IaC (Infrastructure as Code)
+      - name: Run Snyk IaC test
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: snyk iac test --severity-threshold=medium || true
+
